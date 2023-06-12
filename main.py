@@ -37,7 +37,9 @@ def my_function(key_value):
             pass
 
 # Number of iterations target
-iter_per_seconds = 12000
+num_cores = multiprocessing.cpu_count()
+iter_per_seconds = int(3000 * num_cores)
+print(iter_per_seconds)
 
 # Starting Status
 cprint('Searching...', 'red', attrs=['blink'])
@@ -46,6 +48,5 @@ cprint('Searching...', 'red', attrs=['blink'])
 while True:
     random_number = random.randint(1, 115792089237316195423570985008687907852837564279074904382605163141518161494338)
     random_range = range(random_number, random_number + iter_per_seconds)
-    num_cores = multiprocessing.cpu_count()
     pool = multiprocessing.Pool(processes=num_cores)
     results = pool.map(my_function, random_range)
