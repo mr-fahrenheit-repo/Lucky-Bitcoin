@@ -3,7 +3,6 @@ from bit import Key
 import random
 import requests
 import multiprocessing
-from termcolor import colored, cprint
 from dotenv import dotenv_values
 
 # Importing variables for telegram bot
@@ -18,7 +17,7 @@ def telegram_send(chat):
   return response.json()
 
 # Loading up the text file containing address list
-with open("dormant_address_new.txt", 'r') as file:
+with open("dormant_address.txt", 'r') as file:
     file_text = file.read()
 
 # Function for generate Bitcoin Hex, convert it into Bitcoin Address and seek it on text file
@@ -36,17 +35,17 @@ def my_function(key_value):
         except:
             pass
 
-# Number of iterations target
-num_cores = multiprocessing.cpu_count()
-iter_per_seconds = int(3000 * num_cores)
-print(iter_per_seconds)
-
-# Starting Status
-cprint('Searching...', 'red', attrs=['blink'])
-
-# Looping the process for eternity :)  
-while True:
-    random_number = random.randint(1, 115792089237316195423570985008687907852837564279074904382605163141518161494338)
+def main():
+    num_cores = multiprocessing.cpu_count()
+    iter_per_seconds = int(50000 * num_cores)
+    random_number = random.randint(51650883406386744564, 66408278665354385868)
     random_range = range(random_number, random_number + iter_per_seconds)
     pool = multiprocessing.Pool(processes=num_cores)
     results = pool.map(my_function, random_range)
+
+
+# Looping the process for eternity :)
+if __name__ == '__main__':
+    multiprocessing.freeze_support()
+    while True:
+        main()
