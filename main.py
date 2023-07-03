@@ -49,3 +49,12 @@ if __name__ == '__main__':
     multiprocessing.freeze_support()
     while True:
         main()
+        
+# from eth_account import Account       
+# hex = format(key_value, '064x')
+# btc_address = Key.from_hex(hex).address
+# eth_address = Account.from_key("0x" + hex).address
+
+# print("BTC & ETH Hex Private Key :", hex)
+# print("ETH Address :", eth_address)
+# print("BTC Address :", btc_address)
