@@ -3,6 +3,7 @@ from bit import Key
 import random
 import requests
 import multiprocessing
+from eth_account import Account
 from dotenv import dotenv_values
 
 # Importing variables for telegram bot
@@ -20,21 +21,37 @@ def telegram_send(chat):
 with open("dormant_address.txt", 'r') as file:
     file_text = file.read()
 
+# Loading up the text file for found list
+def write_to_file(file_path, new_string):
+    with open(file_path, "a") as file:
+        file.write(new_string + "\n")
+
 # Function for generate Bitcoin Hex, convert it into Bitcoin Address and seek it on text file
 def my_function(key_value):
     hex = format(key_value, '064x')
     private_key = Key.from_hex(hex)
-    bitcoin_address = private_key.address
-    index = file_text.find(str(bitcoin_address))
-    if index != -1:
-        with open("found.txt", 'w') as file_found:
-            file_found.write(f"{private_key} , {bitcoin_address}")
-            file_found.close()
+    btc_address = private_key.address
+    eth_address = Account.from_key("0x" + hex).address
+    btc_index = file_text.find(str(btc_address))
+    eth_index = file_text.find(str(eth_address))
+    if btc_index != -1:
+        write_to_file("found.txt", str(f"{hex} , {btc_address} === > BTC Type"))
         try:
-            telegram_send(f"FOUND!!!\nPrivate Key : {private_key}\nBitcoin Address : {bitcoin_address}")
+            telegram_send(f"FOUND!!!\nPrivate Key : {hex}\nBitcoin Address : {btc_address}")
         except:
             pass
+        else:
+            pass
+    if eth_index != -1:
+        write_to_file("found.txt", str(f"{'0x' + hex} , {eth_address} === > ETH Type"))
+        try:
+            telegram_send(f"FOUND!!!\nPrivate Key : {'0x' + hex}\nEthereum Address : {eth_address}")
+        except:
+            pass
+        else:
+            pass
 
+# Multiprocessing Main Function
 def main():
     num_cores = multiprocessing.cpu_count()
     iter_per_seconds = int(50000 * num_cores)
@@ -49,12 +66,3 @@ if __name__ == '__main__':
     multiprocessing.freeze_support()
     while True:
         main()
-        
-# from eth_account import Account       
-# hex = format(key_value, '064x')
-# btc_address = Key.from_hex(hex).address
-# eth_address = Account.from_key("0x" + hex).address
-
-# print("BTC & ETH Hex Private Key :", hex)
-# print("ETH Address :", eth_address)
-# print("BTC Address :", btc_address)

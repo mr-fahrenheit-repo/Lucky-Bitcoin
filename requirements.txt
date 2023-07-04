@@ -1,4 +1,4 @@
 bit==0.8.0
+eth_account==0.9.0
 python-dotenv==1.0.0
 Requests==2.31.0
-termcolor==2.3.0
