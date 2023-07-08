@@ -51,11 +51,22 @@ def my_function(key_value):
         else:
             pass
 
+# Split the range into 10 
+def range_10():
+    list_rangers = []
+    start = 38211389448314344489778425052867009591436396212094718446259703836700993293138
+    for x in range(10):
+        end = 3821138944831434448977842505286700959143639621209471844625970383670099329313
+        ranges = (start, start + end)
+        start += end + 1 
+        list_rangers.append(ranges)
+    return list_rangers
+
 # Multiprocessing Main Function
-def main():
+def main(start,end):
     num_cores = multiprocessing.cpu_count()
     iter_per_seconds = int(50000 * num_cores)
-    random_number = random.randint(51650883406386744564, 66408278665354385868)
+    random_number = random.randint(start, end)
     random_range = range(random_number, random_number + iter_per_seconds)
     pool = multiprocessing.Pool(processes=num_cores)
     results = pool.map(my_function, random_range)
@@ -65,4 +76,6 @@ def main():
 if __name__ == '__main__':
     multiprocessing.freeze_support()
     while True:
-        main()
+        range_list = range_10()
+        for numb in range_list:
+            main(numb[0],numb[1])
